@@ -1,0 +1,137 @@
+﻿@using AssignMVC.Models
+<style>
+    .k-grid .k-grid-search {
+        display: flex;
+        margin-left: auto;
+        margin-right: 0;
+    }
+</style>
+@*<link href="~/kendoui/styles/kendo.common.min.css" rel="stylesheet" />
+<link href="~/kendoui/styles/kendo.default.min.css" rel="stylesheet" />
+<script src="~/kendoui/js/kendo.all.min.js"></script>*@
+<div class="row">
+    <div class="col-12">
+        @(Html.Kendo().Grid<Employees>()
+            .Name("grid")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.FirstName);
+                columns.Bound(p => p.LastName);
+                columns.Bound(p => p.EmailID);
+                columns.Bound(p => p.ContactNo);
+                columns.Bound(p => p.DepartmentName);
+                columns.Bound(p => p.Status);
+
+                columns.Command(
+                          cmd =>
+                          {
+                              cmd.Custom("Edit").Click("showEdit").HtmlAttributes(new { type = "button", @class = "btn-warning" });
+                              cmd.Custom("Details").Click("showDetails").HtmlAttributes(new { type = "button", @class = "btn-info" });
+                              cmd.Custom("Delete").Click("showDelete").HtmlAttributes(new { type = "button", @class = " btn-danger" });
+                          });
+            })
+
+
+        .Excel(excel=>excel
+        .FileName("Assign.xlsx")
+        .Filterable(true)
+        .ProxyURL(Url.Action("Get","Home"))
+        )
+
+
+              .DataSource(dataSource => dataSource
+                  .Ajax()
+                      .Read(read => read.Action("Orders_Read", "Grid"))
+                      .Model(m => { m.Id(p => p.EmployeeID); })
+                      .Model(m => { m.Field(p => p.EmployeeID).Editable(false);})
+
+
+
+
+              )
+              .Groupable()
+              .Sortable()
+              .Selectable()
+              .Filterable(f=>f.Mode(GridFilterMode.Row))
+              .Pageable(p=>p.Refresh(true)
+              .PageSizes(true)
+              .PreviousNext(true))
+              .Resizable(resize => resize.Columns(true))
+              .Reorderable(reorder => reorder.Columns(true))
+              .Scrollable()
+
+              .ToolBar(t => t.Custom().Text("Add Employee").Url("Home/Create/"))
+              .ToolBar(t => t.Excel())
+              .ToolBar(t => t.Search())
+
+
+              .Search(s=> {
+                   s.Field(c => c.FirstName);
+                   s.Field(c => c.LastName);
+                   s.Field(c => c.EmailID);
+                   s.Field(c => c.DepartmentName);
+               })
+
+        )
+    </div>
+</div>
+@*************************************************************DETAIL***************************************************************************@
+@(Html.Kendo().Window().Name("Details")
+    .Title("Employee Details")
+    .Visible(false)
+    .Modal(true)
+    .Draggable(true)
+    .Width(375)
+)
+<script type="text/x-kendo-template" id="template">
+    <div id="details-container">
+        <h3>#= FirstName # #= LastName #</h3>
+        <em>#= DepartmentName #</em>
+        <dl>
+            <dt>Email ID: #= EmailID #</dt>
+            <dt>Contact Number: #= ContactNo #</dt>
+        </dl>
+    </div>
+</script>
+
+<script type="text/javascript">
+    var detailsTemplate;
+
+    $(document).ready(function () {
+        detailsTemplate = kendo.template($("#template").html());
+    });
+
+    function showDetails(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var wnd = $("#Details").data("kendoWindow");
+
+        wnd.content(detailsTemplate(dataItem));
+        wnd.center().open();
+    }
+</script>
+@***************************************************************End Detail*******************************************************************************@
+
+
+
+<script type="text/javascript">
+    function showEdit(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        @* kendo.alert(dataItem.EmployeeID);*@
+        var id = dataItem.EmployeeID
+        location.href = "@Url.Action("", "Home/Edit")?Id="+id
+    }
+</script>
+
+<script type="text/javascript">
+    function showDelete(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var id = dataItem.EmployeeID
+        location.href = "@Url.Action("", "Home/Delete")?Id="+id
+    }
+</script>
+
+

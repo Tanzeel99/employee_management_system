@@ -1,0 +1,493 @@
+﻿@*<br />
+    @model IEnumerable<AssignMVC.Models.DepartmentTotal>*@
+@*    <script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "/Home/Chartdata",
+            method: "GET",
+            success: function (data) {
+                console.log(data);
+                data = JSON.parse(data);
+                console.log(data);
+            },
+            error: function (error) {
+                console.error(error);
+            },
+        })
+    })*@
+@*    </script>*@
+@*<div id = "Barchart" > </div>
+    <script type = "text/javascript" >
+        $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Home/Chartdata",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(response) {
+                successFunc(response);
+            },
+        });
+
+        function successFunc(jsondata) {
+            var chart = c3.generate({
+                bindto: '#Barchart',
+                data: {
+                    json: jsondata,
+                    keys: {
+                        value: ['Male', 'Female', 'Others'],
+                    },
+                    columns: ['Male', 'Female', 'Others'],
+                    type: 'bar',
+                    groups: [
+                        ['Male', 'Female', 'Others']
+                    ]
+                },
+                color: {
+                    pattern: ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
+                },
+            });
+        }
+    }); </script>*@
+
+<!--model IEnumerable<AssignMVC.Models.DepartmentTotal>
+
+<div class="demo-section k-content wide">
+    (Html.Kendo().Chart(Model.ToList())
+        .Name("chart")
+        .Title("Employee Chart")
+        .Legend(legend => legend
+            .Position(ChartLegendPosition.Bottom)
+        )
+        .SeriesColors(new string[] { "#03a9f4", "#ff9800", "#fad84a", "#4caf50" })
+        .Series(series => {
+            series.Pie(
+                model => model.Total,
+                model => model.DepartmentName-->-->
+@*                null, // Color expression is omitted*@
+            <!--);
+        })
+        .Tooltip(tooltip => tooltip.
+            Template("${ category } - ${ value }%").Visible(true)
+        )
+    )
+</div>-->
+
+<link href="~/kendoui/styles/kendo.common.min.css" rel="stylesheet" />
+<link href="~/kendoui/styles/kendo.default.min.css" rel="stylesheet" />
+<link href="~/kendoui/styles/kendo.default.mobile.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/kendoui/js/kendo.all.min.js"></script>
+
+<div class="demo-section k-content wide">
+    @(Html.Kendo().Chart()
+        .Name("chart")
+                .Title(title => title
+                    .Text("Employee Chart")
+                    .Position(ChartTitlePosition.Bottom))
+        .Legend(legend => legend
+            .Visible(false)
+        )
+        .ChartArea(chart => chart
+            .Background("transparent")
+         )
+        .HtmlAttributes(new { style="background: center no-repeat url(" + @Url.Content("~/Content/shared/styles/world-map.png")})
+        .Series(series => {
+            series.Pie(new dynamic[] {
+                new {category="Asia",value=53.8,color="#9de219"},
+                new {category="Europe",value=16.1,color="#90cc38"},
+                new {category="LatinAmerica",value=11.3,color="#068c35"},
+                new {category="Africa",value=9.6,color="#006634"},
+                new {category="MiddleEast",value=5.2,color="#004d38"},
+                new {category="NorthAmerica",value=3.6,color="#033939"}
+            })
+            .Labels(labels => labels
+                .Template("#= category #: \n #= value#%")
+                .Background("transparent")
+                .Visible(true)
+            )
+            .StartAngle(150);
+        })
+        .Tooltip(tooltip => tooltip
+            .Visible(true)
+            .Format("{0}%")
+        )
+    )
+</div>
+
+<!--<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <link href="~/kendoui/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/kendoui/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/kendoui/styles/kendo.default.mobile.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/kendoui/js/kendo.all.min.js"></script>
+</head>
+<body>
+    <div id="example">
+        <div class="demo-section k-content wide">
+            <div id="chart"-->
+@*style="background: center no-repeat url('../content/shared/styles/world-map.png');"*@
+<!--></div>
+        </div>
+        <script>
+            function createChart() {
+                $("#chart").kendoChart({
+                    title: {
+                        position: "bottom",
+                        text: "Employee Chart"
+                    },
+                    legend: {
+                        visible: false
+                    },
+                    chartArea: {
+                        background: ""
+                    },
+                    seriesDefaults: {
+                        labels: {
+                            visible: true,
+                            background: "transparent",
+                            template: "#= category #: \n #= value#%"
+                        }
+                    },
+                    series: [{
+                        type: "pie",
+                        startAngle: 150,
+                        data: [{
+                            category: "IT",
+                            value: 12,
+                            color: "#9de219"
+                        }, {
+                            category: "Accounts",
+                            value: 15,
+                            color: "#90cc38"
+                        }, {
+                            category: "HR",
+                            value: 11,
+                            color: "#068c35"
+                        }, {
+                            category: "Testing",
+                            value: 9,
+                            color: "#006634"
+                        }, {
+                            category: "Design",
+                            value: 5,
+                            color: "#004d38"
+                        }, {
+                            category: "Not Allocated",
+                            value: 3,
+                            color: "#033939"
+                        }]
+                    }],
+                    tooltip: {
+                        visible: true,
+                        format: "{0}%"
+                    }
+                });
+            }
+
+            $(document).ready(createChart);
+            $(document).bind("kendo:skinChange", createChart);
+        </script>
+    </div>
+
+
+
+
+</body>
+</html>-->
+@*ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg*@
+
+@*<script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+    <figure class="highcharts-figure">
+        <div id="container"></div>
+    </figure>
+    <style>
+        .highcharts-figure, .highcharts-data-table table {
+            min-width: 320px;
+            max-width: 800px;
+            margin: 1em auto;
+        }
+
+        .highcharts-data-table table {
+            font-family: Verdana, sans-serif;
+            border-collapse: collapse;
+            border: 1px solid #EBEBEB;
+            margin: 10px auto;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .highcharts-data-table caption {
+            padding: 1em 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .highcharts-data-table th {
+            font-weight: 600;
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+
+        .highcharts-data-table tr:hover {
+            background: #f1f7ff;
+        }
+
+
+        input[type="number"] {
+            min-width: 50px;
+        }
+    </style>
+    <script>
+        Highcharts.chart('container', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Employees'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.0f} '
+                    }
+                }
+            },
+            series: [{
+                name: 'Percentage Count',
+                colorByPoint: true,
+                data: [{ name: 'IT', y: 61.41 }, { name: 'Accounts', y: 11.84 }, { name: 'HR', y: 10.85 },
+                    { name: 'Testing', y: 4.67 },{name: 'Design',y: 4.18}, {name: 'Not Allocated',y: 1.64}]
+            }]
+        });
+    </script>
+    <br />
+    <br />
+    <br />
+    <table class="table table-bordered table-responsive">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DepartmentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Total)
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DepartmentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total)
+                    </td>
+
+                </tr>
+            }
+        </thead>
+    </table>*@
+
+@*<script src="~/Scripts/chart/exporting.js"></script>
+    <script src="~/Scripts/chart/highcharts.js"></script>
+
+    <div id='container'>
+
+    </div>
+
+    <style>
+        #container {
+            min-width: 310px;
+            height: 400px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $.getJSON("/Home/Chartdata", function (emp) {
+                Highcharts.chart('container', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Employee Chart'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    accessibility: {
+                        point: {
+                            valueSuffix: '%'
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Brands',
+                        colorByPoint: true,
+
+
+                        data: [{
+                            name: 'HR',
+                            y: emp.data,
+                            sliced: true,
+                            selected: true
+                        }, {
+                            name: 'IT',
+                            y: data.IT
+                        }, {
+                            name: 'Testing',
+                            y: data.Testing
+                        }, {
+                            name: 'Design',
+                            y: data.Design
+                        }, {
+                            name: 'Accounts',
+                            y: data.Accounts
+                        }, {
+                            name: 'Sogou Explorer',
+                            y: 1.64
+                        }, {
+                            name: 'Opera',
+                            y: 1.6
+                        }, {
+                            name: 'QQ',
+                            y: 1.2
+                        }, {
+                            name: 'Other',
+                            y: 2.61
+                        }]
+                    }]
+                });
+            });
+        });
+    </script>*@
+@*<script>
+
+            var barChartData =
+                {
+                    labels: [@Html.Raw(ViewBag.Servicelines)],
+                    datasets: [{
+                            label:'Percentage',
+                            backgroundColor:"#009dc4",
+                            borderWidth: 2,
+                            data: [@ViewBag.Pencentage]
+
+                    }]
+                };
+
+        window.onload = function () {
+
+                    var ctx1 = document.getElementById("barcanvas").getContext("2d");
+                    window.myBar = new Chart(ctx1,
+
+                        {
+
+                            type: 'bar',
+                            data: barChartData,
+                            options:
+                                {
+                                    title:
+                                    {
+                                        display: true,
+                                        text: "% of Deliverable Complete by Service Line"
+                                    },
+                                    responsive: true,
+                                maintainAspectRatio: true,
+                                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Service Lines',
+                                            fontSize: 18,
+                                            fontColor: '#009dc4'
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Percentage',
+                                            fontSize: 18,
+                                            fontColor: 'red'
+                                        },
+                                        ticks: { min: 0, max: 100, stepSize: 10, suggestedMin: 0, suggestedMax: 100 }
+                                    }]
+                                    //"hover": {
+                                    //    "animationDuration": 0
+                                    //},
+                                    //"animation": {
+                                    //    "duration": 1,
+                                    //    "onComplete": function () {
+                                    //        var chartInstance = this.chart,
+                                    //            ctx = chartInstance.ctx;
+
+                                    //        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                    //        ctx.textAlign = 'center';
+                                    //        ctx.textBaseline = 'bottom';
+
+                                    //        this.data.datasets.forEach(function (dataset, i) {
+                                    //            var meta = chartInstance.controller.getDatasetMeta(i);
+                                    //            meta.data.forEach(function (bar, index) {
+                                    //                var data = dataset.data[index];
+                                    //                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                    //            });
+                                    //        });
+                                    //    }
+                                    //},
+                                    //legend: {
+                                    //    "display": false
+                                    //},
+                                    //tooltips: {
+                                    //    "enabled": false
+                                    //}
+
+                                }
+                            }
+                        });
+        }
+    </script>*@

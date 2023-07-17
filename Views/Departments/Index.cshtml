@@ -1,0 +1,74 @@
+﻿@model IEnumerable<AssignMVC.Department>
+<script>
+    function ConfirmDelete() {
+        return confirm('Are you sure, You want to delete this?');
+    }
+</script>
+<style>
+    h1 {
+        font-family: 'Times New Roman', Times, serif;
+        color: #0e2f44;
+    }
+</style>
+<h1 class="k-text-align-center"><b>Department Records</b></h1>
+<br />
+<style>
+    table th {
+        width: auto !important;
+    }
+</style>
+<p>
+    @Html.ActionLink("Create New", "Create", "", htmlAttributes: new { @class = "btn btn-primary" })
+</p>
+<table class="table table-bordered table-responsive table-hover ">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DepartmentName)
+        </th>
+        @*        <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedDate)
+            </th>*@
+        @*        <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>*@
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartmentName)
+            </td>
+            @*        <td>
+                    @Html.DisplayFor(modelItem => item.CreatedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedDate)
+                </td>*@
+            @*        <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>*@
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.DepartmentID }, htmlAttributes: new { @class = "btn btn-warning" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.DepartmentID }, htmlAttributes: new { @class = "btn btn-danger", onclick = "return ConfirmDelete()" })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
+            xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+
+  <mvcSiteMapNode title="Home" controller="Home" action="List">
+	  <mvcSiteMapNode title="Employee Kendo Chart" controller="Home" action="Chartdata"/>
+	  <mvcSiteMapNode title="Employee Chart" controller="Home" action="Index"/>
+    <mvcSiteMapNode title="Department Records" controller="Departments" action="Index">
+    <mvcSiteMapNode title="Add Department" controller="Departments" action="Create"/>
+    <mvcSiteMapNode title="Edit Department" controller="Departments" action="Edit" preservedRouteParameters="id"/>
+  </mvcSiteMapNode>
+  </mvcSiteMapNode>
+
+</mvcSiteMap>
